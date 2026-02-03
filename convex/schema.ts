@@ -1,0 +1,24 @@
+import { defineSchema, defineTable } from "convex/server";
+import { authTables } from "@convex-dev/auth/server";
+import { v } from "convex/values";
+
+export default defineSchema({
+  ...authTables,
+  gameStates: defineTable({
+    userId: v.id("users"),
+    grid: v.array(v.array(v.number())),
+    score: v.number(),
+    bestScore: v.number(),
+    gameOver: v.boolean(),
+    won: v.boolean(),
+    updatedAt: v.number(),
+  }).index("by_user", ["userId"]),
+  leaderboard: defineTable({
+    userId: v.id("users"),
+    username: v.string(),
+    score: v.number(),
+    achievedAt: v.number(),
+  })
+    .index("by_score", ["score"])
+    .index("by_user", ["userId"]),
+});
